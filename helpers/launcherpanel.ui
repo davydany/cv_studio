@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>LauncherPanel</class>
+ <widget class="QWidget" name="LauncherPanel">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1033</width>
+    <height>480</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>Launcher</string>
+  </property>
+  <widget class="QWidget" name="gridLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>1005</width>
+     <height>91</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="mainLayout">
+    <item row="0" column="1">
+     <widget class="QPushButton" name="videoFileViewerBtn">
+      <property name="text">
+       <string>New Video File Viewer</string>
+      </property>
+      <property name="icon">
+       <iconset resource="../image_assets.qrc">
+        <normaloff>:/assets/img/tv.png</normaloff>:/assets/img/tv.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>16</width>
+        <height>16</height>
+       </size>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="2">
+     <widget class="QPushButton" name="cameraViewerBtn">
+      <property name="text">
+       <string>New Camera Viewer</string>
+      </property>
+      <property name="icon">
+       <iconset resource="../image_assets.qrc">
+        <normaloff>:/assets/img/camera.png</normaloff>:/assets/img/camera.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>16</width>
+        <height>16</height>
+       </size>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QPushButton" name="cascadeClassifierTrainerBtn">
+      <property name="text">
+       <string>New Cascade Classifier Trainer</string>
+      </property>
+      <property name="icon">
+       <iconset resource="../image_assets.qrc">
+        <normaloff>:/assets/img/trainer.png</normaloff>:/assets/img/trainer.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>16</width>
+        <height>16</height>
+       </size>
+      </property>
+      <property name="autoRepeat">
+       <bool>false</bool>
+      </property>
+      <property name="autoDefault">
+       <bool>false</bool>
+      </property>
+      <property name="default">
+       <bool>false</bool>
+      </property>
+      <property name="flat">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QPushButton" name="cascadeClassifierTrainerBtn_2">
+      <property name="text">
+       <string>Open Cascade Classifier Trainer</string>
+      </property>
+      <property name="icon">
+       <iconset resource="../image_assets.qrc">
+        <normaloff>:/assets/img/trainer.png</normaloff>:/assets/img/trainer.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>16</width>
+        <height>16</height>
+       </size>
+      </property>
+      <property name="autoRepeat">
+       <bool>false</bool>
+      </property>
+      <property name="autoDefault">
+       <bool>false</bool>
+      </property>
+      <property name="default">
+       <bool>false</bool>
+      </property>
+      <property name="flat">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QPushButton" name="videoFileViewerBtn_2">
+      <property name="text">
+       <string>Open Video File Viewer</string>
+      </property>
+      <property name="icon">
+       <iconset resource="../image_assets.qrc">
+        <normaloff>:/assets/img/tv.png</normaloff>:/assets/img/tv.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>16</width>
+        <height>16</height>
+       </size>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="2">
+     <widget class="QPushButton" name="cameraViewerBtn_2">
+      <property name="text">
+       <string>Open Camera Viewer</string>
+      </property>
+      <property name="icon">
+       <iconset resource="../image_assets.qrc">
+        <normaloff>:/assets/img/camera.png</normaloff>:/assets/img/camera.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>16</width>
+        <height>16</height>
+       </size>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources>
+  <include location="../image_assets.qrc"/>
+ </resources>
+ <connections/>
+</ui>
