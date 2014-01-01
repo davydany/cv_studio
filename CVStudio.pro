@@ -9,7 +9,7 @@
 # 2. qjson
 #
 
-QT       += core gui
+QT       += core gui xmlpatterns xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -22,14 +22,18 @@ SOURCES += main.cpp\
     objdetect/classifiertrainer.cpp \
     objdetect/newclassifiertrainerprompt.cpp \
     helpers/launcherpanel.cpp \
-    objdetect/positiveimagemodel.cpp
+#    objdetect/positiveimagemodel.cpp \
+    objdetect/classifiertrainerproject.cpp
 
 HEADERS  += mainwindow.h \
     objdetect/classifiertrainer.h \
     objdetect/newclassifiertrainerprompt.h \
     helpers/launcherpanel.h \
     includes.h \
-    objdetect/positiveimagemodel.h
+#    objdetect/positiveimagemodel.h \
+    objdetect/classifiertrainerproject.h \
+    objdetect/section.h \
+#    objdetect/positivetreeitem.h
 
 
 # OpenCV

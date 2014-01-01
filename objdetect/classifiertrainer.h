@@ -2,10 +2,13 @@
 #define CLASSIFIERTRAINER_H
 
 #include <QWidget>
+
 class QPushButton;
 class QTreeView;
 class QGroupBox;
 class QProgressBar;
+class QStandardItemModel;
+class ClassifierTrainerProject;
 
 class ClassifierTrainer : public QWidget
 {
@@ -18,19 +21,24 @@ private:
     // methods
     void initialize();
     void closeTrainer();
+    bool determineProjectConfigFile();
+    void updatePositivesGroup();
 
     // members
     QGroupBox *positivesGroup;
     QProgressBar *positivesProgressBar;
-    QTreeView *positivesList;
+    QTreeView *positivesTreeView;
+    QStandardItemModel *positivesModel;
     QPushButton *addImageToPositivesBtn;
     QPushButton *delImageFromPositivesBtn;
     QPushButton *addSelectionToPositivesBtn;
     QPushButton *delSelectionToNegativesBtn;
 
+
+
     QGroupBox *negativesGroup;
     QProgressBar *negativesProgressBar;
-    QTreeView *negativesList;
+    QTreeView *negativesTreeView;
     QPushButton *addImageToNegativesBtn;
     QPushButton *delImageFromNegativesBtn;
     QPushButton *addSelectionToNegativesBtn;
@@ -40,7 +48,10 @@ private:
 
 
     QString projectName;
-    QString projectSavePath;
+    QString projectDirectory;
+    QString projectConfigPath;
+
+    ClassifierTrainerProject *project;
 
     // slots
 private slots:
