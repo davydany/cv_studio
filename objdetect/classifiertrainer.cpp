@@ -9,6 +9,7 @@ ClassifierTrainer::ClassifierTrainer(bool new_trainer) :
     QWidget(0)
 {
     positivesModel = new QStandardItemModel();
+    negativesModel = new QStandardItemModel();
 
     if (new_trainer)
     {
@@ -54,32 +55,6 @@ ClassifierTrainer::ClassifierTrainer(bool new_trainer) :
 
             projectName = *project->name();
             projectDirectory = selectedProjectDir;
-
-            // debug
-            const QList<QString> keys = project->positives()->keys();
-            qDebug() << "Number of positives: " << keys.length();
-
-            QMultiMap<QString, Section> *positives = project->positives();
-            for(int i=0; i < keys.length(); i++)
-            {
-                QString key = keys.at(i);
-                QList<Section> values = project->positives()->values();
-                qDebug() << "Path: " << key;
-                for(int j=0; j < values.length(); j++)
-                {
-                    Section section = values.at(j);
-                    qDebug() << "Section X: " << section.x() << "; Y: " << section.y() <<
-                                "; Width: " << section.width() << "; Height: " << section.height();
-                }
-            }
-
-            const QList<QString> *negatives = project->negatives();
-            qDebug() << "Number of Negatives: " << negatives->count();
-            for(int i=0; i < negatives->count(); i++)
-            {
-                qDebug() << negatives->at(i);
-            }
-
             isValid = true;
 
         }
@@ -90,6 +65,7 @@ ClassifierTrainer::ClassifierTrainer(bool new_trainer) :
 ClassifierTrainer::~ClassifierTrainer()
 {
     delete positivesModel; // TODO: delete all newly created variables
+    delete negativesModel;
 }
 
 void ClassifierTrainer::initialize()
@@ -108,6 +84,7 @@ void ClassifierTrainer::initialize()
 
     addImageToPositivesBtn = new QPushButton(QIcon(":/image_add.png"), "Add Image", this);
     delImageFromPositivesBtn = new QPushButton(QIcon(":/image_delete.png"), "Delete Image", this);
+    delImageFromPositivesBtn->setShortcut(QKeySequence(tr("Ctrl+D")));
     addSelectionToPositivesBtn = new QPushButton(QIcon(":/note_add.png"), "Add Section", this);
     delSelectionToNegativesBtn = new QPushButton(QIcon(":/note_delete.png"), "Delete Section", this);
 
@@ -135,9 +112,11 @@ void ClassifierTrainer::initialize()
     QHBoxLayout *negativesControlLayout = new QHBoxLayout;
     QVBoxLayout *negativesGroupLayout = new QVBoxLayout;
     negativesTreeView = new QTreeView(this);
+    updateNegativesGroup();
 
     addImageToNegativesBtn = new QPushButton(QIcon(":/image_add.png"), "Add Image", this);
     delImageFromNegativesBtn = new QPushButton(QIcon(":/image_delete.png"), "Delete Image", this);
+    delImageFromNegativesBtn->setShortcut(QKeySequence(tr("Ctrl+E")));
     addSelectionToNegativesBtn = new QPushButton(QIcon(":/note_add.png"), "Add Section", this);
     delSelectionFromNegativesBtn = new QPushButton(QIcon(":/note_delete.png"), "Delete Section", this);
 
@@ -180,7 +159,7 @@ void ClassifierTrainer::updatePositivesGroup()
     // remove existing model if it exists
     if (positivesModel) delete positivesModel;
 
-    // create model
+    // create column headers for the model
     positivesModel = new QStandardItemModel();
     positivesModel->setColumnCount(5);
     positivesModel->setHeaderData(0, Qt::Horizontal, "Image", Qt::DisplayRole);
@@ -190,14 +169,16 @@ void ClassifierTrainer::updatePositivesGroup()
     positivesModel->setHeaderData(4, Qt::Horizontal, "Height", Qt::DisplayRole);
 
     QStandardItem *invisibleRootNode = positivesModel->invisibleRootItem();
-    QList<QString> keys = project->positives()->keys();
-    for(int i=0; i < keys.length(); i++)
+    QList<QString> *keys = project->positives();
+    qDebug() << "Number of positives loaded: " << keys->length();
+    for(int i=0; i < keys->length(); i++)
     {
-        QString path = keys.at(i);
-        QStandardItem *imageRowItem = new QStandardItem(QString(path));
+        QString path = keys->at(i);
+        QStandardItem *imageRowItem = new QStandardItem(path);
         imageRowItem->setEditable(false);
         imageRowItem->setIcon(QIcon(":/assets/img/image.png"));
-        QList<Section> sections = project->positives()->values(path);
+
+        QList<Section> sections = project->positive_sections()->values(path);
         for(int j=0; j < sections.length(); j++)
         {
             Section s = sections.at(j);
@@ -244,6 +225,36 @@ void ClassifierTrainer::updatePositivesGroup()
     positivesTreeView->resizeColumnToContents(4);
 }
 
+void ClassifierTrainer::updateNegativesGroup()
+{
+    project->load(); // get the latest from the file system
+
+    // remove existing model if it exists
+    if (negativesModel) delete negativesModel;
+
+    // create column headers for the model
+    negativesModel = new QStandardItemModel();
+    negativesModel->setColumnCount(1);
+    negativesModel->setHeaderData(0, Qt::Horizontal, "Image", Qt::DisplayRole);
+
+    // populate the rows
+    QStandardItem *invisibleRootNode = negativesModel->invisibleRootItem();
+    QList<QString> *negatives = project->negatives();
+    for(int i=0; i < negatives->length(); i++)
+    {
+        QString path = negatives->at(i);
+        QStandardItem *imageRowItem = new QStandardItem(QString(path));
+        imageRowItem->setEditable(false);
+        imageRowItem->setIcon(QIcon(":/assets/img/image.png"));
+        invisibleRootNode->appendRow(imageRowItem);
+    }
+
+    negativesTreeView->setModel(negativesModel);
+    negativesTreeView->resizeColumnToContents(0);
+
+}
+
+
 void ClassifierTrainer::closeTrainer()
 {
     this->hide();
@@ -284,8 +295,28 @@ void ClassifierTrainer::add_image_to_positives_slot()
     positivesProgressBar->hide();
     updatePositivesGroup();
 }
+
 void ClassifierTrainer::del_image_from_positives_slot()
 {
+    QModelIndexList indices = positivesTreeView->selectionModel()->selectedIndexes();
+    if (indices.length() > 0)
+    {
+        QModelIndex index = indices[0];
+        project->load();
+        QStandardItem *item = positivesModel->itemFromIndex(index);
+        if (!item->parent())
+        {
+            project->removePositiveImage(item->text());
+            project->save();
+            updatePositivesGroup();
+        }
+        else
+        {
+            // TODO
+            qDebug() << "Not parent. Need to get to parent.";
+        }
+    }
+
 }
 void ClassifierTrainer::add_selection_to_positives_slot()
 {
@@ -297,9 +328,50 @@ void ClassifierTrainer::add_image_to_negatives_slot()
 {
     QStringList newImages = QFileDialog::getOpenFileNames(this, tr("Negative Image"),
                                                      projectDirectory, tr(DEFAULT_QFILEDIALOG_IMAGE_FILTER.toUtf8().constData()));
+
+    QString destDirPath = QString("%1%2%3").arg(projectDirectory).arg(QDir::separator()).arg("negatives");
+    QDir dest(destDirPath);
+    negativesProgressBar->setMaximum(newImages.length());
+    negativesProgressBar->show();
+    for(int i=0; i < newImages.length(); i++)
+    {
+        // initialize
+        QString srcImageAbsPath = newImages.at(i);
+        QFileInfo srcImageFileInfo(srcImageAbsPath);
+        QString dstImageAbsPath = QString("%1%2%3").arg(destDirPath).arg(QDir::separator()).arg(srcImageFileInfo.fileName());
+
+        // copy the image from src directory to dest directory
+        if (QFile::exists(dstImageAbsPath))
+            QFile::remove(dstImageAbsPath);
+        QFile::copy(srcImageAbsPath, dstImageAbsPath);
+
+        // add record to xml file
+        project->addNegativeImage(dstImageAbsPath);
+
+        // update progress bar
+        negativesProgressBar->setValue(i+1);
+    }
+
+    project->save();
+    negativesProgressBar->hide();
+    updateNegativesGroup();
+
 }
 void ClassifierTrainer::del_image_from_negatives_slot()
 {
+    QModelIndexList indices = negativesTreeView->selectionModel()->selectedIndexes();
+    if (indices.length() > 0)
+    {
+        QModelIndex index = indices[0];
+        project->load();
+
+        QStandardItem *item = negativesModel->itemFromIndex(index);
+        qDebug() << "ABout to delete negative : " << item->text();
+        project->removeNegativeImage(item->text());
+        project->save();
+        updateNegativesGroup();
+    }
+
 }
 void ClassifierTrainer::add_selection_to_negatives_slot()
 {

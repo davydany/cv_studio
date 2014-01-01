@@ -23,6 +23,7 @@ private:
     void closeTrainer();
     bool determineProjectConfigFile();
     void updatePositivesGroup();
+    void updateNegativesGroup();
 
     // members
     QGroupBox *positivesGroup;
@@ -39,6 +40,7 @@ private:
     QGroupBox *negativesGroup;
     QProgressBar *negativesProgressBar;
     QTreeView *negativesTreeView;
+    QStandardItemModel *negativesModel;
     QPushButton *addImageToNegativesBtn;
     QPushButton *delImageFromNegativesBtn;
     QPushButton *addSelectionToNegativesBtn;

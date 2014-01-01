@@ -12,7 +12,8 @@ ClassifierTrainerProject::ClassifierTrainerProject(QString projectPath) //:
     m_projectAuthor = new QString();
     m_projectType = new QString(ClassifierTrainerProject::projectType());
 
-    m_positives = new QMultiMap<QString, Section>();
+    m_positive_sections = new QMultiMap<QString, Section>();
+    m_positives = new QList<QString>();
     m_negatives = new QList<QString>();
 
     determine_path_to_config_file(projectPath);
@@ -25,6 +26,7 @@ ClassifierTrainerProject::~ClassifierTrainerProject()
     delete m_projectAuthor;
     delete m_projectType;
 
+    delete m_positive_sections;
     delete m_positives;
     delete m_negatives;
 
@@ -86,7 +88,12 @@ QString* ClassifierTrainerProject::type()
     return m_projectType;
 }
 
-QMultiMap<QString, Section> *ClassifierTrainerProject::positives()
+QMultiMap<QString, Section> *ClassifierTrainerProject::positive_sections()
+{
+    return m_positive_sections;
+}
+
+QList<QString> *ClassifierTrainerProject::positives()
 {
     return m_positives;
 }
@@ -100,37 +107,76 @@ bool ClassifierTrainerProject::addPositiveImage(QString pathToPositiveImage)
 {
     if (m_positives)
     {
-        if (m_positives->values(pathToPositiveImage).length() == 0)
+        if ((m_positives->indexOf(pathToPositiveImage) == -1))
         {
-            QImage image = QImage(pathToPositiveImage);
-            Section section = Section(pathToPositiveImage, 0, 0, image.width(), image.height());
-            qDebug() << "Adding Image, this is the path: " << pathToPositiveImage;
-            m_positives->insert(pathToPositiveImage, section);
+            m_positives->append(pathToPositiveImage);
+            qSort(m_positives->begin(), m_positives->end());
+            return true;
         }
     }
+    return false;
 }
 
 bool ClassifierTrainerProject::addNegativeImage(QString pathToNegativeImage)
 {
+    if (m_negatives)
+    {
+        if (m_negatives->indexOf(pathToNegativeImage) == -1)
+        {
+            m_negatives->append(pathToNegativeImage);
+            qSort(m_negatives->begin(), m_negatives->end());
+            return true;
+        }
+    }
     return false;
 }
 
 bool ClassifierTrainerProject::removePositiveImage(QString pathToPositiveImage)
 {
+    int indexOfPositiveImage = m_positives->indexOf(pathToPositiveImage);
+    if (indexOfPositiveImage != -1)
+    {
+        // remove the image
+        QFile file(pathToPositiveImage);
+        if (file.exists()) file.remove();
+
+        // remove reference to image
+        m_positives->removeAll(pathToPositiveImage);
+
+        // find all sections and remove them
+        QList<QString> section_keys = m_positive_sections->keys();
+        int indexOfSections = section_keys.indexOf(pathToPositiveImage);
+        if (indexOfSections != -1)
+        {
+            m_positive_sections->remove(pathToPositiveImage);
+        }
+        return true;
+    }
     return false;
 }
 
 bool ClassifierTrainerProject::removeNegativeImage(QString pathToNegativeImage)
 {
+    int indexofNegativeImage = m_negatives->indexOf(pathToNegativeImage);
+    if (indexofNegativeImage != -1)
+    {
+        // remove the image
+        QFile file(pathToNegativeImage);
+        if (file.exists()) file.remove();
+
+        // remove reference to image
+        m_negatives->removeAll(pathToNegativeImage);
+        return true;
+    }
     return false;
 }
 
-bool ClassifierTrainerProject::addSectionToPositiveImage(QString positiveImagePath, QRect section)
+bool ClassifierTrainerProject::addSectionToPositiveImage(Section section)
 {
     return false;
 }
 
-bool ClassifierTrainerProject::removeSectionFromPositiveImage(QString positiveImagePath, QRect section)
+bool ClassifierTrainerProject::removeSectionFromPositiveImage(Section section)
 {
     return false;
 }
@@ -138,6 +184,7 @@ bool ClassifierTrainerProject::removeSectionFromPositiveImage(QString positiveIm
 bool ClassifierTrainerProject::load()
 {
     // clean up existing values if they're used
+    if (m_positive_sections) delete m_positive_sections;
     if (m_positives) delete m_positives;
     if (m_negatives) delete m_negatives;
 
@@ -176,30 +223,36 @@ bool ClassifierTrainerProject::load()
                 if (reader.name().toString() == "Positives")
                 {
                     reader.readNextStartElement();
-                    m_positives = new QMultiMap<QString, Section>();
+                    m_positives = new QList<QString>();
+                    m_positive_sections = new QMultiMap<QString, Section>();
                     while(reader.name().toString() == "Image")
                     {
                         QString path;
                         QXmlStreamAttributes imageAttr = reader.attributes();
                         if (imageAttr.hasAttribute("path"))
                             path = imageAttr.value("path").toString();
-                        reader.readNextStartElement();
-                        while(reader.name().toString() == "Section")
-                        {
-                            QString x, y, width, height;
-                            QXmlStreamAttributes sectionAttr = reader.attributes();
-                            if (sectionAttr.hasAttribute("x")) x = sectionAttr.value("x").toString();
-                            if (sectionAttr.hasAttribute("y")) y = sectionAttr.value("y").toString();
-                            if (sectionAttr.hasAttribute("width")) width = sectionAttr.value("width").toString();
-                            if (sectionAttr.hasAttribute("height")) height = sectionAttr.value("height").toString();
 
-                            if (!(x.isEmpty() && y.isEmpty() && width.isEmpty() && height.isEmpty()))
+                        reader.readNextStartElement();
+                        if ((!path.isEmpty()) && (m_positives->indexOf(path) == -1))
+                        {
+                            m_positives->append(path);
+                            while(reader.name().toString() == "Section")
                             {
-                                // @TODO: There needs to be a better XML Parsing than this. This is ridiculous.
-                                Section section(path, x.toInt(), y.toInt(), width.toInt(), height.toInt());
-                                m_positives->insertMulti(path, section);
+                                QString x, y, width, height;
+                                QXmlStreamAttributes sectionAttr = reader.attributes();
+                                if (sectionAttr.hasAttribute("x")) x = sectionAttr.value("x").toString();
+                                if (sectionAttr.hasAttribute("y")) y = sectionAttr.value("y").toString();
+                                if (sectionAttr.hasAttribute("width")) width = sectionAttr.value("width").toString();
+                                if (sectionAttr.hasAttribute("height")) height = sectionAttr.value("height").toString();
+
+                                if (!(x.isEmpty() && y.isEmpty() && width.isEmpty() && height.isEmpty()))
+                                {
+                                    // @TODO: There needs to be a better XML Parsing than this. This is ridiculous.
+                                    Section section(path, x.toInt(), y.toInt(), width.toInt(), height.toInt());
+                                    m_positive_sections->insertMulti(path, section);
+                                }
+                                reader.readNextStartElement();
                             }
-                            reader.readNextStartElement();
                         }
                     }
                 }
@@ -216,7 +269,7 @@ bool ClassifierTrainerProject::load()
                         if (imageAttr.hasAttribute("path"))
                             path = imageAttr.value("path").toString();
 
-                        if (!path.isEmpty())
+                        if (!path.isEmpty() && (m_negatives->indexOf(path) == -1))
                             m_negatives->append(path);
                         reader.readNextStartElement();
                     }
@@ -265,22 +318,19 @@ bool ClassifierTrainerProject::save()
     xmlWriter.writeStartElement("Elements"); // start <Elements> tag
 
     // write the positive elements
-    QList<QString> positive_keys = m_positives->keys();
-    for(int i=0; i < positive_keys.length(); i++)
+    QList<QString> *positive_image_paths = m_positives;
+
+    if (positive_image_paths->count() == 0) // no images
     {
-        qDebug() << "Positive Key : [" << positive_keys.at(i) << "]";
-    }
-    if (positive_keys.count() == 0)
         xmlWriter.writeEmptyElement("Positives");
+    }
     else
     {
         xmlWriter.writeStartElement("Positives"); // start <Positives> tag
-        qDebug() << "Number of Positives: " << positive_keys.length();
-        for(int i=0; i < positive_keys.length(); i++)
+        for(int i=0; i < positive_image_paths->length(); i++)
         {
-            QString key = positive_keys.at(i);
-            QList<Section> sections = positives()->values(key);
-            qDebug() << " Key (" << key << ") at i = " << i << " has " << sections.length() << "sections.";
+            QString key = positive_image_paths->at(i);
+            QList<Section> sections = positive_sections()->values(key);
             if (sections.length() == 0)
             {
                 // start and close <Image> tag

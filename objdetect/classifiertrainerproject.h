@@ -8,6 +8,7 @@
 class QStringList;
 class QRect;
 class QString;
+class Section;
 
 class ClassifierTrainerProject
 {
@@ -21,7 +22,8 @@ public:
     QString* author();
     QString* type();
 
-    QMultiMap<QString, Section>* positives();
+    QMultiMap<QString, Section>* positive_sections();
+    QList<QString>* positives();
     QList<QString>* negatives();
 
     bool addPositiveImage(QString pathToPositiveImage);
@@ -29,8 +31,8 @@ public:
     bool removePositiveImage(QString pathToPositiveImage);
     bool removeNegativeImage(QString pathToNegativeImage);
 
-    bool addSectionToPositiveImage(QString positiveImagePath, QRect section);
-    bool removeSectionFromPositiveImage(QString positiveImagePath, QRect section);
+    bool addSectionToPositiveImage(Section section);
+    bool removeSectionFromPositiveImage(Section section);
 
     bool save();
     bool load();
@@ -51,7 +53,8 @@ private:
     QString* m_projectAuthor;
     QString* m_projectType;
 
-    QMultiMap<QString, Section>* m_positives;
+    QMultiMap<QString, Section>* m_positive_sections;
+    QList<QString>* m_positives;
     QList<QString>* m_negatives;
 
     QStringList *m_errors;
