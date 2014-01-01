@@ -43,8 +43,6 @@ private:
     QStandardItemModel *negativesModel;
     QPushButton *addImageToNegativesBtn;
     QPushButton *delImageFromNegativesBtn;
-    QPushButton *addSelectionToNegativesBtn;
-    QPushButton *delSelectionFromNegativesBtn;
 
     QGroupBox *previewPaneGroup;
 
@@ -64,8 +62,6 @@ private slots:
     void del_selection_from_positives_slot();
     void add_image_to_negatives_slot();
     void del_image_from_negatives_slot();
-    void add_selection_to_negatives_slot();
-    void del_selection_from_negatives_slot();
 
 };
 

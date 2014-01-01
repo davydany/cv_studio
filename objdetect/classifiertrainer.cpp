@@ -117,18 +117,12 @@ void ClassifierTrainer::initialize()
     addImageToNegativesBtn = new QPushButton(QIcon(":/image_add.png"), "Add Image", this);
     delImageFromNegativesBtn = new QPushButton(QIcon(":/image_delete.png"), "Delete Image", this);
     delImageFromNegativesBtn->setShortcut(QKeySequence(tr("Ctrl+E")));
-    addSelectionToNegativesBtn = new QPushButton(QIcon(":/note_add.png"), "Add Section", this);
-    delSelectionFromNegativesBtn = new QPushButton(QIcon(":/note_delete.png"), "Delete Section", this);
 
     connect(addImageToNegativesBtn, SIGNAL(clicked()), this, SLOT(add_image_to_negatives_slot()));
     connect(delImageFromNegativesBtn, SIGNAL(clicked()), this, SLOT(del_image_from_negatives_slot()));
-    connect(addSelectionToNegativesBtn, SIGNAL(clicked()), this, SLOT(add_selection_to_negatives_slot()));
-    connect(delSelectionFromNegativesBtn, SIGNAL(clicked()), this, SLOT(del_selection_from_negatives_slot()));
 
     negativesControlLayout->addWidget(addImageToNegativesBtn);
     negativesControlLayout->addWidget(delImageFromNegativesBtn);
-    negativesControlLayout->addWidget(addSelectionToNegativesBtn);
-    negativesControlLayout->addWidget(delSelectionFromNegativesBtn);
 
     negativesGroupLayout->addLayout(negativesControlLayout);
     negativesGroupLayout->addWidget(negativesProgressBar);
@@ -372,10 +366,4 @@ void ClassifierTrainer::del_image_from_negatives_slot()
         updateNegativesGroup();
     }
 
-}
-void ClassifierTrainer::add_selection_to_negatives_slot()
-{
-}
-void ClassifierTrainer::del_selection_from_negatives_slot()
-{
 }
