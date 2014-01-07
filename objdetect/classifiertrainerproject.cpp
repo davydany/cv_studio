@@ -173,12 +173,34 @@ bool ClassifierTrainerProject::removeNegativeImage(QString pathToNegativeImage)
 
 bool ClassifierTrainerProject::addSectionToPositiveImage(Section section)
 {
-    return false;
+    // check that the section's path exists
+    if (m_positives->indexOf(section.path()) == -1)
+        m_positives->append(section.path());
+
+    // check that the section doesn't already exist
+//    if (m_positive_sections->contains(section.path(), section))
+//        return true;
+
+    m_positive_sections->insert(section.path(), section);
+    return true;
 }
 
 bool ClassifierTrainerProject::removeSectionFromPositiveImage(Section section)
 {
-    return false;
+    foreach(QString key, m_positive_sections->keys())
+    {
+        qDebug() << "Key: " << key;
+        foreach(Section section, m_positive_sections->values(key))
+        {
+            qDebug() << "\t - " << section.toString();
+        }
+    }
+
+    QString key = section.path();
+    int deleteCount = m_positive_sections->remove(key, section);
+    qDebug() << "Attempted to delete: " << section.toString();
+    qDebug() << "DELETED: " << deleteCount;
+    return deleteCount > 0;
 }
 
 bool ClassifierTrainerProject::load()

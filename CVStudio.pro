@@ -23,7 +23,9 @@ SOURCES += main.cpp\
     objdetect/newclassifiertrainerprompt.cpp \
     helpers/launcherpanel.cpp \
 #    objdetect/positiveimagemodel.cpp \
-    objdetect/classifiertrainerproject.cpp
+    objdetect/classifiertrainerproject.cpp \
+    objdetect/addsectiondialog.cpp \
+    objdetect/mouseselecteventfilter.cpp
 
 HEADERS  += mainwindow.h \
     objdetect/classifiertrainer.h \
@@ -33,6 +35,8 @@ HEADERS  += mainwindow.h \
 #    objdetect/positiveimagemodel.h \
     objdetect/classifiertrainerproject.h \
     objdetect/section.h \
+    objdetect/addsectiondialog.h \
+    objdetect/mouseselecteventfilter.h
 #    objdetect/positivetreeitem.h
 
 
@@ -74,4 +78,5 @@ RESOURCES += \
 
 FORMS += \
     objdetect/newclassifiertrainerprompt.ui \
-    helpers/launcherpanel.ui
+    helpers/launcherpanel.ui \
+    objdetect/addsectiondialog.ui
