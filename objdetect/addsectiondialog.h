@@ -5,6 +5,8 @@
 #include <QPen>
 #include <QDialog>
 
+class MouseSelectEventFilter;
+
 namespace Ui {
 class AddSectionDialog;
 }
@@ -18,6 +20,7 @@ public:
     ~AddSectionDialog();
 
     void mouseClick(int x, int y);
+    void mouseMove(int x, int y);
     Section section();
 
 private slots:
@@ -27,6 +30,7 @@ private slots:
 
 private:
     Ui::AddSectionDialog *ui;
+    MouseSelectEventFilter *m_filter;
     bool m_selectionStarted = false;
     QString m_pathToImage;
     QPixmap m_image;

@@ -23,9 +23,9 @@ AddSectionDialog::AddSectionDialog(QString imagePath, QWidget *parent) :
         return;
     }
 
-    MouseSelectEventFilter *filter = new MouseSelectEventFilter(this);
+    m_filter = new MouseSelectEventFilter(this);
     m_image = QPixmap(imagePath);
-    ui->imageLbl->installEventFilter(filter);
+    ui->imageLbl->installEventFilter(m_filter);
     ui->imageLbl->setPixmap(m_image);
     ui->imageLbl->setAlignment(Qt::AlignLeft);
 
@@ -38,6 +38,20 @@ AddSectionDialog::AddSectionDialog(QString imagePath, QWidget *parent) :
 AddSectionDialog::~AddSectionDialog()
 {
     delete ui;
+    delete m_filter;
+
+}
+
+void AddSectionDialog::mouseMove(int x, int y)
+{
+    m_image = QPixmap(m_pathToImage);
+    QPainter painter(&m_image);
+    painter.setPen(QPen(Qt::green));
+    painter.drawLine(QPointF(0, y), QPointF(m_image.width(), y)); // draw horizontal line
+    painter.drawLine(QPointF(x, 0), QPointF(x, m_image.height())); // draw vertical line
+    ui->imageLbl->setPixmap(m_image);
+
+    qDebug() << "X: " << x << " Y: " << y;
 }
 
 void AddSectionDialog::mouseClick(int x, int y)

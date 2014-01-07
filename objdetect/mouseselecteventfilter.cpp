@@ -16,8 +16,16 @@ bool MouseSelectEventFilter::eventFilter(QObject *dist, QEvent *event)
         int mouseX = mouseEvent->pos().x();
         int mouseY = mouseEvent->pos().y();
 
-//        qDebug() << "(" << mouseX << ", " << mouseY << ")";
         AddSectionDialog *p = (AddSectionDialog *) parent();
         p->mouseClick(mouseX, mouseY);
+    }
+    else if (event->type() == QEvent::MouseMove)
+    {
+        QMouseEvent *mouseEvent = (QMouseEvent *) event;
+        int mouseX = mouseEvent->pos().x();
+        int mouseY = mouseEvent->pos().y();
+
+        AddSectionDialog *p = (AddSectionDialog *) parent();
+        p->mouseMove(mouseX, mouseY);
     }
 }
