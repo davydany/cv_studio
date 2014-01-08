@@ -23,6 +23,10 @@ AddSectionDialog::AddSectionDialog(QString imagePath, QWidget *parent) :
         return;
     }
 
+    // calculate the diff
+    int diffHeight = height() - ui->imageLbl->height();
+    int diffWidth = width() - ui->imageLbl->width();
+
     m_filter = new MouseSelectEventFilter(this);
     m_image = QPixmap(imagePath);
     ui->imageLbl->installEventFilter(m_filter);
@@ -33,6 +37,11 @@ AddSectionDialog::AddSectionDialog(QString imagePath, QWidget *parent) :
     m_pen = QPen(Qt::red);
     m_pen.setWidth(3);
 
+    ui->imageLbl->setFixedWidth(m_image.width());
+    ui->imageLbl->setFixedHeight(m_image.height());
+
+    setLayout(ui->gridLayout);
+    adjustSize();
 }
 
 AddSectionDialog::~AddSectionDialog()
@@ -44,6 +53,10 @@ AddSectionDialog::~AddSectionDialog()
 
 void AddSectionDialog::mouseMove(int x, int y)
 {
+    // get label dimension
+    int w = ui->imageLbl->width();
+    int h = ui->imageLbl->height();
+
     m_image = QPixmap(m_pathToImage);
     QPainter painter(&m_image);
     painter.setPen(QPen(Qt::green));
@@ -108,6 +121,10 @@ void AddSectionDialog::mouseClick(int x, int y)
             m_width = x - m_x;
             m_height = y - m_y;
 
+            // get label dimension
+            int w = ui->imageLbl->width();
+            int h = ui->imageLbl->height();
+
             // draw section
             m_image = QPixmap(m_pathToImage);
             QPainter painter(&m_image);
@@ -122,6 +139,9 @@ void AddSectionDialog::mouseClick(int x, int y)
     if (m_y > 0) ui->yVal->setText(QString::number(m_y)); else ui->yVal->setText("N/A");
     if (m_width > 0) ui->widthVal->setText(QString::number(m_width)); else ui->widthVal->setText("N/A");
     if (m_height > 0) ui->heightVal->setText(QString::number(m_height)); else ui->heightVal->setText("N/A");
+
+    // set layout
+    setLayout(ui->gridLayout);
 }
 
 void AddSectionDialog::on_buttonBox_accepted()
@@ -148,6 +168,10 @@ void AddSectionDialog::on_resetSectionbtn_clicked()
     if (m_width > 0) ui->widthVal->setText(QString::number(m_width)); else ui->widthVal->setText("N/A");
     if (m_height > 0) ui->heightVal->setText(QString::number(m_height)); else ui->heightVal->setText("N/A");
     ui->resetSectionbtn->setEnabled(!m_selectionStarted);
+
+    // get label dimension
+    int w = ui->imageLbl->width();
+    int h = ui->imageLbl->height();
 
     // update image
     m_image = QPixmap(m_pathToImage);

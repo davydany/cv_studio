@@ -10,6 +10,16 @@ MouseSelectEventFilter::MouseSelectEventFilter(QObject *parent) :
 
 bool MouseSelectEventFilter::eventFilter(QObject *dist, QEvent *event)
 {
+    if (event->type() == QEvent::MouseMove)
+    {
+        QMouseEvent *mouseEvent = (QMouseEvent *) event;
+        int mouseX = mouseEvent->pos().x();
+        int mouseY = mouseEvent->pos().y();
+
+        AddSectionDialog *p = (AddSectionDialog *) parent();
+        p->mouseMove(mouseX, mouseY);
+    }
+
     if (event->type() == QEvent::MouseButtonRelease)
     {
         QMouseEvent *mouseEvent = (QMouseEvent *) event;
@@ -18,14 +28,5 @@ bool MouseSelectEventFilter::eventFilter(QObject *dist, QEvent *event)
 
         AddSectionDialog *p = (AddSectionDialog *) parent();
         p->mouseClick(mouseX, mouseY);
-    }
-    else if (event->type() == QEvent::MouseMove)
-    {
-        QMouseEvent *mouseEvent = (QMouseEvent *) event;
-        int mouseX = mouseEvent->pos().x();
-        int mouseY = mouseEvent->pos().y();
-
-        AddSectionDialog *p = (AddSectionDialog *) parent();
-        p->mouseMove(mouseX, mouseY);
     }
 }
