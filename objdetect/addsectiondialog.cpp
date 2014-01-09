@@ -35,10 +35,12 @@ AddSectionDialog::AddSectionDialog(QString imagePath, QWidget *parent) :
 
     // set pen
     m_pen = QPen(Qt::red);
-    m_pen.setWidth(3);
+    m_pen.setWidth(2);
 
     ui->imageLbl->setFixedWidth(m_image.width());
     ui->imageLbl->setFixedHeight(m_image.height());
+    ui->scrollArea->setFixedWidth(m_image.width());
+    ui->scrollArea->setFixedHeight(m_image.height());
 
     setLayout(ui->gridLayout);
     adjustSize();
@@ -59,9 +61,23 @@ void AddSectionDialog::mouseMove(int x, int y)
 
     m_image = QPixmap(m_pathToImage);
     QPainter painter(&m_image);
-    painter.setPen(QPen(Qt::green));
+    QPen pen(Qt::green);
+    pen.setWidth(1);
+    painter.setPen(pen);
     painter.drawLine(QPointF(0, y), QPointF(m_image.width(), y)); // draw horizontal line
     painter.drawLine(QPointF(x, 0), QPointF(x, m_image.height())); // draw vertical line
+
+    if (m_selectionStarted)
+    {
+        // selection already started so we need to get the width and height
+        QPen redPen(Qt::red);
+        redPen.setWidth(2);
+        painter.setPen(redPen);
+        int width = abs(m_x - x);
+        int height = abs(m_y - y);
+        painter.drawRect(m_x, m_y, width, height);
+    }
+
     ui->imageLbl->setPixmap(m_image);
 
     qDebug() << "X: " << x << " Y: " << y;
@@ -79,6 +95,7 @@ void AddSectionDialog::mouseClick(int x, int y)
 
     if (m_selectionStarted)
     {
+        qDebug() << "1st Click";
         // selection didn't start, so we're storing X and Y
         m_x = x;
         m_y = y;
@@ -91,11 +108,10 @@ void AddSectionDialog::mouseClick(int x, int y)
         painter.setPen(m_pen);
         painter.drawPoint(x, y);
         ui->imageLbl->setPixmap(m_image);
-
-
     }
     else
     {
+        qDebug() << "2nd Click";
         if ((x > m_image.width()) || (y > m_image.height()))
         {
             QMessageBox::warning(this, "Invalid Selection", "The selection you made is out of bounds. Your selection has been reset.");
@@ -121,16 +137,13 @@ void AddSectionDialog::mouseClick(int x, int y)
             m_width = x - m_x;
             m_height = y - m_y;
 
-            // get label dimension
-            int w = ui->imageLbl->width();
-            int h = ui->imageLbl->height();
-
             // draw section
             m_image = QPixmap(m_pathToImage);
             QPainter painter(&m_image);
             painter.setPen(m_pen);
             painter.drawRect(m_x, m_y, m_width, m_height);
             ui->imageLbl->setPixmap(m_image);
+            qDebug() << "Image: " << ui->imageLbl->pixmap();
         }
     }
 
@@ -139,9 +152,6 @@ void AddSectionDialog::mouseClick(int x, int y)
     if (m_y > 0) ui->yVal->setText(QString::number(m_y)); else ui->yVal->setText("N/A");
     if (m_width > 0) ui->widthVal->setText(QString::number(m_width)); else ui->widthVal->setText("N/A");
     if (m_height > 0) ui->heightVal->setText(QString::number(m_height)); else ui->heightVal->setText("N/A");
-
-    // set layout
-    setLayout(ui->gridLayout);
 }
 
 void AddSectionDialog::on_buttonBox_accepted()

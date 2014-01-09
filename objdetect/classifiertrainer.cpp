@@ -68,6 +68,23 @@ ClassifierTrainer::~ClassifierTrainer()
 {
     delete positivesModel; // TODO: delete all newly created variables
     delete negativesModel;
+    delete positivesGroup;
+    delete positivesProgressBar;
+    delete positivesTreeView;
+    delete positivesModel;
+    delete addImageToPositivesBtn;
+    delete delImageFromPositivesBtn;
+    delete addSelectionToPositivesBtn;
+    delete delSelectionToNegativesBtn;
+    delete negativesGroup;
+    delete negativesProgressBar;
+    delete negativesTreeView;
+    delete negativesModel;
+    delete addImageToNegativesBtn;
+    delete delImageFromNegativesBtn;
+    delete previewPaneGroup;
+    delete previewImageLabel;
+    delete project;
 }
 
 void ClassifierTrainer::initialize()
@@ -100,7 +117,6 @@ void ClassifierTrainer::initialize()
     positivesControlLayout->addWidget(delImageFromPositivesBtn);
     positivesControlLayout->addWidget(addSelectionToPositivesBtn);
     positivesControlLayout->addWidget(delSelectionToNegativesBtn);
-
 
     positivesGroupLayout->addLayout(positivesControlLayout);
     positivesGroupLayout->addWidget(positivesProgressBar);
@@ -138,8 +154,6 @@ void ClassifierTrainer::initialize()
     previewPaneGroup = new QGroupBox("Image Preview", this);
     previewPaneGroup->setFixedWidth(500);
     previewImage("");
-
-
 
     // set main layout
     imagesListLayout->addWidget(positivesGroup);
@@ -220,7 +234,7 @@ void ClassifierTrainer::updatePositivesGroup()
     }
 
     positivesTreeView->setModel(positivesModel);
-    positivesTreeView->resizeColumnToContents(0);
+    positivesTreeView->setColumnWidth(0, 400);
     positivesTreeView->resizeColumnToContents(1);
     positivesTreeView->resizeColumnToContents(2);
     positivesTreeView->resizeColumnToContents(3);
