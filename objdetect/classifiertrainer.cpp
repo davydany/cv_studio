@@ -234,7 +234,7 @@ void ClassifierTrainer::updatePositivesGroup()
     }
 
     positivesTreeView->setModel(positivesModel);
-    positivesTreeView->setColumnWidth(0, 400);
+    positivesTreeView->setColumnWidth(0, 350);
     positivesTreeView->resizeColumnToContents(1);
     positivesTreeView->resizeColumnToContents(2);
     positivesTreeView->resizeColumnToContents(3);

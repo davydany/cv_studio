@@ -28,6 +28,8 @@ private slots:
     void on_buttonBox_rejected();
     void on_resetSectionbtn_clicked();
 
+    void on_showGuides_clicked();
+
 private:
     Ui::AddSectionDialog *ui;
     MouseSelectEventFilter *m_filter;
