@@ -35,7 +35,7 @@ AddSectionDialog::AddSectionDialog(QString imagePath, QWidget *parent) :
 
     // set pen
     m_pen = QPen(QColor(0xFF, 0, 0, 127));
-    m_pen.setWidth(3);
+    m_pen.setWidth(2);
 
     ui->imageLbl->setFixedWidth(m_image.width());
     ui->imageLbl->setFixedHeight(m_image.height());
@@ -55,6 +55,8 @@ AddSectionDialog::~AddSectionDialog()
 
 void AddSectionDialog::mouseMove(int x, int y)
 {
+    if (x < ui->imageLbl->x()) return;
+    if (y < ui->imageLbl->y()) return;
 
     // get label dimension
     int w = ui->imageLbl->width();
@@ -62,30 +64,34 @@ void AddSectionDialog::mouseMove(int x, int y)
 
     m_image = QPixmap(m_pathToImage);
     QPainter painter(&m_image);
+
+
+    if (m_selectionStarted)
+    {
+        // selection already started so we need to get the width and height
+        painter.setPen(m_pen);
+        int width = abs(m_x - x);
+        int height = abs(m_y - y);
+        int trueX = x, trueY = y;
+        if (m_x < x) trueX = m_x;
+        if (m_y < y) trueY = m_y;
+
+        painter.drawRect(trueX, trueY, width, height);
+    }
+
     if (ui->showGuides->checkState() == Qt::Checked)
     {
         QPen borderPen(QColor(255, 255, 255, 255));
-        borderPen.setWidth(5);
+        borderPen.setWidth(3);
         painter.setPen(borderPen);
         painter.drawLine(QPointF(0, y), QPointF(m_image.width(), y)); // draw horizontal line
         painter.drawLine(QPointF(x, 0), QPointF(x, m_image.height())); // draw vertical line
 
         QPen pen(QColor(0, 0, 0, 127));
-        pen.setWidth(3);
+        pen.setWidth(1);
         painter.setPen(pen);
         painter.drawLine(QPointF(0, y), QPointF(m_image.width(), y)); // draw horizontal line
         painter.drawLine(QPointF(x, 0), QPointF(x, m_image.height())); // draw vertical line
-    }
-
-    if (m_selectionStarted)
-    {
-        // selection already started so we need to get the width and height
-        QPen selectionPen(QColor(255, 0, 0, 255));
-        selectionPen.setWidth(3);
-        painter.setPen(selectionPen);
-        int width = abs(m_x - x);
-        int height = abs(m_y - y);
-        painter.drawRect(m_x, m_y, width, height);
     }
 
     ui->imageLbl->setPixmap(m_image);

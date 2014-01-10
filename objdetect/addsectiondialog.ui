@@ -26,29 +26,20 @@
     <property name="sizeConstraint">
      <enum>QLayout::SetNoConstraint</enum>
     </property>
-    <item row="0" column="3">
-     <spacer name="verticalSpacer">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
+    <item row="3" column="0" colspan="3">
+     <widget class="QLabel" name="label_3">
+      <property name="text">
+       <string>Hint: Click and Drag with your mouse to see guides</string>
       </property>
-      <property name="sizeType">
-       <enum>QSizePolicy::Fixed</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>10</height>
-       </size>
-      </property>
-     </spacer>
+     </widget>
     </item>
-    <item row="4" column="0" colspan="4">
-     <widget class="QDialogButtonBox" name="buttonBox">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
+    <item row="3" column="3">
+     <widget class="QPushButton" name="resetSectionbtn">
+      <property name="enabled">
+       <bool>false</bool>
       </property>
-      <property name="standardButtons">
-       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+      <property name="text">
+       <string>Reset Section</string>
       </property>
      </widget>
     </item>
@@ -103,21 +94,15 @@
       </widget>
      </widget>
     </item>
-    <item row="0" column="2">
-     <spacer name="verticalSpacer_2">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
+    <item row="2" column="0" colspan="3">
+     <widget class="QCheckBox" name="showGuides">
+      <property name="text">
+       <string>Show Guides</string>
       </property>
-      <property name="sizeType">
-       <enum>QSizePolicy::Fixed</enum>
+      <property name="checked">
+       <bool>true</bool>
       </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>10</height>
-       </size>
-      </property>
-     </spacer>
+     </widget>
     </item>
     <item row="1" column="3">
      <layout class="QFormLayout" name="formLayout">
@@ -202,30 +187,29 @@
       </item>
      </layout>
     </item>
-    <item row="3" column="0" colspan="3">
-     <widget class="QLabel" name="label_3">
-      <property name="text">
-       <string>Hint: Click and Drag with your mouse to see guides</string>
+    <item row="0" column="3">
+     <spacer name="verticalSpacer">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
       </property>
-     </widget>
+      <property name="sizeType">
+       <enum>QSizePolicy::Fixed</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>10</height>
+       </size>
+      </property>
+     </spacer>
     </item>
-    <item row="3" column="3">
-     <widget class="QPushButton" name="resetSectionbtn">
-      <property name="enabled">
-       <bool>false</bool>
+    <item row="4" column="2" colspan="2">
+     <widget class="QDialogButtonBox" name="buttonBox">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
       </property>
-      <property name="text">
-       <string>Reset Section</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="0" colspan="3">
-     <widget class="QCheckBox" name="showGuides">
-      <property name="text">
-       <string>Show Guides</string>
-      </property>
-      <property name="checked">
-       <bool>true</bool>
+      <property name="standardButtons">
+       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
       </property>
      </widget>
     </item>
