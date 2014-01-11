@@ -1,6 +1,7 @@
 #include "launcherpanel.h"
 #include "ui_launcherpanel.h"
-#include "objdetect/classifiertrainer.h"
+#include "mainwindow.h"
+#include "objdetect/gui/classifiertrainergui.h"
 
 LauncherPanel::LauncherPanel(QWidget *parent) :
     QWidget(parent),
@@ -17,12 +18,14 @@ LauncherPanel::~LauncherPanel()
 
 void LauncherPanel::on_cascadeClassifierTrainerBtn_clicked()
 {
-    ClassifierTrainer *trainer = new ClassifierTrainer(true);
-    trainer->show();
+    MainWindow *parent = (MainWindow *) this->parent();
+    ClassifierTrainerGUI *trainer = new ClassifierTrainerGUI(true, parent);
+    parent->setCentralWidget(trainer);
 }
 
 void LauncherPanel::on_cascadeClassifierTrainerBtn_2_clicked()
 {
-    ClassifierTrainer *trainer = new ClassifierTrainer(false);
-    trainer->show();
+    MainWindow *parent = (MainWindow *) this->parent();
+    ClassifierTrainerGUI *trainer = new ClassifierTrainerGUI(false, parent);
+    parent->setCentralWidget(trainer);
 }

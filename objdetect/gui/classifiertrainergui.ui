@@ -1,0 +1,690 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ClassifierTrainerGUI</class>
+ <widget class="QWidget" name="ClassifierTrainerGUI">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1044</width>
+    <height>937</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QWidget" name="gridLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1041</width>
+     <height>911</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="mainLayout">
+    <property name="sizeConstraint">
+     <enum>QLayout::SetMinAndMaxSize</enum>
+    </property>
+    <property name="leftMargin">
+     <number>10</number>
+    </property>
+    <property name="topMargin">
+     <number>10</number>
+    </property>
+    <property name="rightMargin">
+     <number>10</number>
+    </property>
+    <property name="bottomMargin">
+     <number>10</number>
+    </property>
+    <item row="1" column="2">
+     <widget class="QPushButton" name="closeTrainer">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Close</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="3">
+     <widget class="QPushButton" name="runTrainer">
+      <property name="text">
+       <string>Run</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0" colspan="4">
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="positiveTab">
+       <attribute name="title">
+        <string>Positives</string>
+       </attribute>
+       <widget class="QWidget" name="horizontalLayoutWidget">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>1001</width>
+          <height>801</height>
+         </rect>
+        </property>
+        <layout class="QHBoxLayout" name="positiveTabMainLayout">
+         <item>
+          <widget class="QSplitter" name="positiveTabSplitter">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Plain</enum>
+           </property>
+           <property name="lineWidth">
+            <number>1</number>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="opaqueResize">
+            <bool>true</bool>
+           </property>
+           <property name="childrenCollapsible">
+            <bool>true</bool>
+           </property>
+           <widget class="QGroupBox" name="positiveImagesGroup">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>500</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="title">
+             <string>Positive Images</string>
+            </property>
+            <widget class="QWidget" name="verticalLayoutWidget_4">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>20</y>
+               <width>501</width>
+               <height>791</height>
+              </rect>
+             </property>
+             <layout class="QVBoxLayout" name="positiveImagesGroupLayout">
+              <property name="leftMargin">
+               <number>5</number>
+              </property>
+              <property name="topMargin">
+               <number>5</number>
+              </property>
+              <property name="rightMargin">
+               <number>5</number>
+              </property>
+              <property name="bottomMargin">
+               <number>5</number>
+              </property>
+              <item>
+               <widget class="QLabel" name="negativeInstruction_2">
+                <property name="mouseTracking">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Add positive images for training in this frame. Selecting any image allows you to preview them on the right. After selecting an image you can add sections that you wish to create samples from. Use the buttons below to add or delete images, and add or delete sections. The project is automatically saved.</string>
+                </property>
+                <property name="wordWrap">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_3">
+                <item>
+                 <widget class="QPushButton" name="addImageToPositivesBtn">
+                  <property name="text">
+                   <string>Add Image</string>
+                  </property>
+                  <property name="icon">
+                   <iconset>
+                    <normalon>:/image_add.png</normalon>
+                   </iconset>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="delImageFromPositivesBtn">
+                  <property name="text">
+                   <string>Delete Image</string>
+                  </property>
+                  <property name="icon">
+                   <iconset>
+                    <normalon>:/image_delete.png</normalon>
+                   </iconset>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_4">
+                <item>
+                 <widget class="QPushButton" name="addSelectionToPositivesBtn">
+                  <property name="text">
+                   <string>Add Section</string>
+                  </property>
+                  <property name="icon">
+                   <iconset>
+                    <normalon>:/note_add.png</normalon>
+                   </iconset>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="delSelectionToNegativesBtn">
+                  <property name="text">
+                   <string>Delete Section</string>
+                  </property>
+                  <property name="icon">
+                   <iconset>
+                    <normalon>:/note_delete.png</normalon>
+                   </iconset>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <widget class="QTreeView" name="positiveTreeView"/>
+              </item>
+              <item>
+               <layout class="QFormLayout" name="formLayout_3">
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_9">
+                  <property name="text">
+                   <string>Number of Images:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QLabel" name="positiveImageCount">
+                  <property name="text">
+                   <string>N/A</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+           <widget class="QGroupBox" name="positiveImagePreviewGroup">
+            <property name="title">
+             <string>Image Preview</string>
+            </property>
+            <widget class="QWidget" name="verticalLayoutWidget_5">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>20</y>
+               <width>501</width>
+               <height>791</height>
+              </rect>
+             </property>
+             <layout class="QVBoxLayout" name="positiveImagePreviewGroupLayout">
+              <property name="leftMargin">
+               <number>5</number>
+              </property>
+              <property name="topMargin">
+               <number>5</number>
+              </property>
+              <property name="rightMargin">
+               <number>5</number>
+              </property>
+              <property name="bottomMargin">
+               <number>5</number>
+              </property>
+              <item>
+               <widget class="QScrollArea" name="scrollArea_2">
+                <property name="widgetResizable">
+                 <bool>true</bool>
+                </property>
+                <widget class="QWidget" name="scrollAreaWidgetContents_2">
+                 <property name="geometry">
+                  <rect>
+                   <x>0</x>
+                   <y>0</y>
+                   <width>489</width>
+                   <height>779</height>
+                  </rect>
+                 </property>
+                 <widget class="QLabel" name="posImageLbl">
+                  <property name="geometry">
+                   <rect>
+                    <x>0</x>
+                    <y>0</y>
+                    <width>491</width>
+                    <height>781</height>
+                   </rect>
+                  </property>
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="text">
+                   <string>No Image Selected</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                 </widget>
+                </widget>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="negativeTab">
+       <attribute name="title">
+        <string>Negatives</string>
+       </attribute>
+       <widget class="QWidget" name="horizontalLayoutWidget_2">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>1011</width>
+          <height>821</height>
+         </rect>
+        </property>
+        <layout class="QHBoxLayout" name="negativeTabMainLayout">
+         <item>
+          <widget class="QSplitter" name="negativeTabSplitter">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <widget class="QGroupBox" name="negativeImageGroup">
+            <property name="title">
+             <string>Negative Images</string>
+            </property>
+            <widget class="QWidget" name="verticalLayoutWidget_2">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>20</y>
+               <width>501</width>
+               <height>791</height>
+              </rect>
+             </property>
+             <layout class="QVBoxLayout" name="negativeImageGroupLayout">
+              <property name="leftMargin">
+               <number>5</number>
+              </property>
+              <property name="topMargin">
+               <number>5</number>
+              </property>
+              <property name="rightMargin">
+               <number>5</number>
+              </property>
+              <property name="bottomMargin">
+               <number>5</number>
+              </property>
+              <item>
+               <widget class="QLabel" name="negativeInstruction">
+                <property name="mouseTracking">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Add negative images for training in this frame. Selecting any image allows you to preview them on the right. Use the buttons below to add or delete images. The project is automatically saved.</string>
+                </property>
+                <property name="wordWrap">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_2">
+                <item>
+                 <widget class="QPushButton" name="addImageToNegativesBtn">
+                  <property name="text">
+                   <string>Add Image</string>
+                  </property>
+                  <property name="icon">
+                   <iconset>
+                    <normalon>:/image_add.png</normalon>
+                   </iconset>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="delImageFromNegativesBtn">
+                  <property name="text">
+                   <string>Delete Image</string>
+                  </property>
+                  <property name="icon">
+                   <iconset>
+                    <normalon>:/image_delete.png</normalon>
+                   </iconset>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <widget class="QTreeView" name="negativeTreeView"/>
+              </item>
+              <item>
+               <layout class="QFormLayout" name="formLayout_4">
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_10">
+                  <property name="text">
+                   <string>Number of Images:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QLabel" name="negativeImageCount">
+                  <property name="text">
+                   <string>N/A</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+           <widget class="QGroupBox" name="negativeImagePreviewGroup">
+            <property name="title">
+             <string>Image Preview</string>
+            </property>
+            <widget class="QWidget" name="verticalLayoutWidget_3">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>20</y>
+               <width>510</width>
+               <height>791</height>
+              </rect>
+             </property>
+             <layout class="QVBoxLayout" name="negativeImagePreviewGroupLayout">
+              <property name="leftMargin">
+               <number>5</number>
+              </property>
+              <property name="topMargin">
+               <number>5</number>
+              </property>
+              <property name="rightMargin">
+               <number>5</number>
+              </property>
+              <property name="bottomMargin">
+               <number>5</number>
+              </property>
+              <item>
+               <widget class="QScrollArea" name="scrollArea">
+                <property name="widgetResizable">
+                 <bool>true</bool>
+                </property>
+                <widget class="QWidget" name="scrollAreaWidgetContents">
+                 <property name="geometry">
+                  <rect>
+                   <x>0</x>
+                   <y>0</y>
+                   <width>498</width>
+                   <height>779</height>
+                  </rect>
+                 </property>
+                 <widget class="QLabel" name="negImageLbl">
+                  <property name="geometry">
+                   <rect>
+                    <x>0</x>
+                    <y>0</y>
+                    <width>491</width>
+                    <height>781</height>
+                   </rect>
+                  </property>
+                  <property name="text">
+                   <string>No Image Selected</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                 </widget>
+                </widget>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="prefTab">
+       <attribute name="title">
+        <string>Project</string>
+       </attribute>
+       <widget class="QWidget" name="verticalLayoutWidget">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>9</y>
+          <width>1021</width>
+          <height>801</height>
+         </rect>
+        </property>
+        <layout class="QVBoxLayout" name="prefTabLayout">
+         <property name="leftMargin">
+          <number>10</number>
+         </property>
+         <property name="topMargin">
+          <number>10</number>
+         </property>
+         <property name="rightMargin">
+          <number>10</number>
+         </property>
+         <property name="bottomMargin">
+          <number>10</number>
+         </property>
+         <item>
+          <layout class="QFormLayout" name="formLayout_2">
+           <property name="sizeConstraint">
+            <enum>QLayout::SetFixedSize</enum>
+           </property>
+           <property name="fieldGrowthPolicy">
+            <enum>QFormLayout::FieldsStayAtSizeHint</enum>
+           </property>
+           <property name="labelAlignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+           <property name="formAlignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+           </property>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_5">
+             <property name="text">
+              <string>Name</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLineEdit" name="lineEdit_5">
+             <property name="minimumSize">
+              <size>
+               <width>250</width>
+               <height>0</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_6">
+             <property name="text">
+              <string>Description</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QPlainTextEdit" name="plainTextEdit_2">
+             <property name="minimumSize">
+              <size>
+               <width>250</width>
+               <height>0</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_7">
+             <property name="text">
+              <string>Author</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QLineEdit" name="lineEdit_6">
+             <property name="minimumSize">
+              <size>
+               <width>250</width>
+               <height>0</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_8">
+             <property name="text">
+              <string>Project Type</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QLineEdit" name="lineEdit_4">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>250</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Cascade Classifier Trainer</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="Line" name="line">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="groupBox">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>450</height>
+            </size>
+           </property>
+           <property name="title">
+            <string>Console Output</string>
+           </property>
+           <property name="flat">
+            <bool>false</bool>
+           </property>
+           <property name="checkable">
+            <bool>false</bool>
+           </property>
+           <widget class="QPlainTextEdit" name="consoleOut">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>30</y>
+              <width>981</width>
+              <height>411</height>
+             </rect>
+            </property>
+           </widget>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QProgressBar" name="progressBar">
+      <property name="value">
+       <number>25</number>
+      </property>
+      <property name="invertedAppearance">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <spacer name="horizontalSpacer">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

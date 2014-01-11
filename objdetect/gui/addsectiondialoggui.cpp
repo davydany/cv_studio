@@ -1,9 +1,9 @@
 #include "includes.h"
-#include "objdetect/mouseselecteventfilter.h"
-#include "addsectiondialog.h"
+#include "mouseselecteventfilter.h"
+#include "addsectiondialoggui.h"
 #include "ui_addsectiondialog.h"
 
-AddSectionDialog::AddSectionDialog(QString imagePath, QWidget *parent) :
+AddSectionDialogGUI::AddSectionDialogGUI(QString imagePath, QWidget *parent) :
     QDialog(parent), m_selectionStarted(false), ui(new Ui::AddSectionDialog), m_pathToImage(imagePath),
     m_x(0), m_y(0), m_width(0), m_height(0)
 {
@@ -46,14 +46,14 @@ AddSectionDialog::AddSectionDialog(QString imagePath, QWidget *parent) :
     adjustSize();
 }
 
-AddSectionDialog::~AddSectionDialog()
+AddSectionDialogGUI::~AddSectionDialogGUI()
 {
     delete ui;
     delete m_filter;
 
 }
 
-void AddSectionDialog::mouseMove(int x, int y)
+void AddSectionDialogGUI::mouseMove(int x, int y)
 {
     if (x < ui->imageLbl->x()) return;
     if (y < ui->imageLbl->y()) return;
@@ -97,7 +97,7 @@ void AddSectionDialog::mouseMove(int x, int y)
     ui->imageLbl->setPixmap(m_image);
 }
 
-void AddSectionDialog::mouseClick(int x, int y)
+void AddSectionDialogGUI::mouseClick(int x, int y)
 {
     m_selectionStarted = !m_selectionStarted;
     ui->resetSectionbtn->setEnabled(!m_selectionStarted);
@@ -171,17 +171,17 @@ void AddSectionDialog::mouseClick(int x, int y)
     if (m_height > 0) ui->heightVal->setText(QString::number(m_height)); else ui->heightVal->setText("N/A");
 }
 
-void AddSectionDialog::on_buttonBox_accepted()
+void AddSectionDialogGUI::on_buttonBox_accepted()
 {
 
 }
 
-void AddSectionDialog::on_buttonBox_rejected()
+void AddSectionDialogGUI::on_buttonBox_rejected()
 {
 
 }
 
-void AddSectionDialog::on_resetSectionbtn_clicked()
+void AddSectionDialogGUI::on_resetSectionbtn_clicked()
 {
     m_x = 0;
     m_y = 0;
@@ -205,12 +205,12 @@ void AddSectionDialog::on_resetSectionbtn_clicked()
     ui->imageLbl->setPixmap(m_image);
 }
 
-Section AddSectionDialog::section()
+Section AddSectionDialogGUI::section()
 {
     return Section(m_pathToImage, m_x, m_y, m_width, m_height);
 }
 
-void AddSectionDialog::on_showGuides_clicked()
+void AddSectionDialogGUI::on_showGuides_clicked()
 {
     m_image = QPixmap(m_pathToImage);
     ui->imageLbl->setPixmap(m_image);

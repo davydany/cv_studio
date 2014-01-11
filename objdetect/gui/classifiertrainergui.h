@@ -1,5 +1,5 @@
-#ifndef CLASSIFIERTRAINER_H
-#define CLASSIFIERTRAINER_H
+#ifndef CLASSIFIERTRAINERGUI_H
+#define CLASSIFIERTRAINERGUI_H
 
 #include <QWidget>
 
@@ -13,58 +13,63 @@ class QModelIndex;
 class ClassifierTrainerProject;
 class Section;
 
-class ClassifierTrainer : public QWidget
+namespace Ui {
+class ClassifierTrainerGUI;
+}
+
+class ClassifierTrainerGUI : public QWidget
 {
     Q_OBJECT
+
 public:
-    explicit ClassifierTrainer(bool new_trainer=true);
-    ~ClassifierTrainer();
+    explicit ClassifierTrainerGUI(bool new_trainer, QWidget *parent = 0);
+    ~ClassifierTrainerGUI();
 
 private:
+    Ui::ClassifierTrainerGUI *ui;
+
     // methods
     void initialize();
     void closeTrainer();
     bool determineProjectConfigFile();
     void updatePositivesGroup();
     void updateNegativesGroup();
-    void previewImage(QString path, Section *section=0);
+    void previewImage(QLabel *imageLabel, QString path, Section *section=0);
 
     // members
-    QGroupBox *positivesGroup;
-    QProgressBar *positivesProgressBar;
     QTreeView *positivesTreeView;
     QStandardItemModel *positivesModel;
     QPushButton *addImageToPositivesBtn;
     QPushButton *delImageFromPositivesBtn;
     QPushButton *addSelectionToPositivesBtn;
     QPushButton *delSelectionToNegativesBtn;
-    
-    QGroupBox *negativesGroup;
-    QProgressBar *negativesProgressBar;
+
     QTreeView *negativesTreeView;
     QStandardItemModel *negativesModel;
     QPushButton *addImageToNegativesBtn;
     QPushButton *delImageFromNegativesBtn;
-    
+
     QGroupBox *previewPaneGroup;
-    QLabel *previewImageLabel;
-    
+    QLabel *posImageLbl;
+    QLabel *negImageLbl;
+    QProgressBar *progressBar;
+
     QString projectName;
     QString projectDirectory;
     QString projectConfigPath;
     ClassifierTrainerProject *project;
 
-    // slots
 private slots:
-
-    void add_image_to_positives_slot();
-    void del_image_from_positives_slot();
-    void add_selection_to_positives_slot();
-    void del_selection_from_positives_slot();
-    void add_image_to_negatives_slot();
-    void del_image_from_negatives_slot();
-    void show_image_preview_for_positive_item(const QModelIndex & index);
-    void show_image_preview_for_negative_item(const QModelIndex & index);
+    void on_addImageToPositivesBtn_clicked();
+    void on_delImageFromPositivesBtn_clicked();
+    void on_addSelectionToPositivesBtn_clicked();
+    void on_delSelectionToNegativesBtn_clicked();
+    void on_addImageToNegativesBtn_clicked();
+    void on_delImageFromNegativesBtn_clicked();
+    void on_positiveTreeView_activated(const QModelIndex &index);
+    void on_negativeTreeView_activated(const QModelIndex &index);
+    void on_closeTrainer_clicked();
+    void on_runTrainer_clicked();
 };
 
-#endif // CLASSIFIERTRAINER_H
+#endif // CLASSIFIERTRAINERGUI_H

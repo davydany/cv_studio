@@ -7,7 +7,7 @@
         <file>assets/img/tv.png</file>
         <file>assets/img/camera.png</file>
         <file>assets/img/trainer.png</file>
-        <file>assets/img/image.png</file>
-        <file>assets/img/shading.png</file>
+        <file alias="image.png">assets/img/image.png</file>
+        <file alias="shading.png">assets/img/shading.png</file>
     </qresource>
 </RCC>

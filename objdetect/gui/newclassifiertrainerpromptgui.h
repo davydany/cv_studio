@@ -7,13 +7,13 @@ namespace Ui {
 class NewClassifierTrainerPrompt;
 }
 
-class NewClassifierTrainerPrompt : public QDialog
+class NewClassifierTrainerPromptGUI : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit NewClassifierTrainerPrompt(QWidget *parent = 0);
-    ~NewClassifierTrainerPrompt();
+    explicit NewClassifierTrainerPromptGUI(QWidget *parent = 0);
+    ~NewClassifierTrainerPromptGUI();
 
     QString getProjectName();
     QString getProjectSavePath();

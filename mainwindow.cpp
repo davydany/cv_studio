@@ -1,6 +1,6 @@
 #include <QDebug>
 #include <QApplication>
-#include "objdetect/classifiertrainer.h"
+#include "objdetect/gui/classifiertrainergui.h"
 #include "helpers/launcherpanel.h"
 #include "mainwindow.h"
 
@@ -52,7 +52,7 @@ void MainWindow::initialize_menus()
 
 void MainWindow::initialize_central_widget()
 {
-    LauncherPanel *panel = new LauncherPanel();
+    LauncherPanel *panel = new LauncherPanel(this);
     setCentralWidget(panel);
 }
 
@@ -60,8 +60,8 @@ void MainWindow::initialize_central_widget()
 // SLOTS //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void MainWindow::project_new_cascade_classifier_trainer_slot()
 {
-    ClassifierTrainer *trainer = new ClassifierTrainer(true);
-    trainer->showNormal();
+    ClassifierTrainerGUI *trainer = new ClassifierTrainerGUI(true, this);
+    setCentralWidget(trainer);
 }
 
 void MainWindow::project_new_camera_viewer_slot()
@@ -81,8 +81,8 @@ void MainWindow::project_quit()
 
 void MainWindow::project_open_cascade_classifier_trainer_slot()
 {
-    ClassifierTrainer *trainer = new ClassifierTrainer(false);
-    trainer->showNormal();
+    ClassifierTrainerGUI *trainer = new ClassifierTrainerGUI(false);
+    setCentralWidget(trainer);
 }
 
 void MainWindow::project_open_video_viewer_slot()

@@ -11,13 +11,13 @@ namespace Ui {
 class AddSectionDialog;
 }
 
-class AddSectionDialog : public QDialog
+class AddSectionDialogGUI : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit AddSectionDialog(QString imagePath, QWidget *parent = 0);
-    ~AddSectionDialog();
+    explicit AddSectionDialogGUI(QString imagePath, QWidget *parent = 0);
+    ~AddSectionDialogGUI();
 
     void mouseClick(int x, int y);
     void mouseMove(int x, int y);

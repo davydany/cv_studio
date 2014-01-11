@@ -1,20 +1,20 @@
 #include "includes.h"
-#include "newclassifiertrainerprompt.h"
+#include "newclassifiertrainerpromptgui.h"
 #include "ui_newclassifiertrainerprompt.h"
 
-NewClassifierTrainerPrompt::NewClassifierTrainerPrompt(QWidget *parent) :
+NewClassifierTrainerPromptGUI::NewClassifierTrainerPromptGUI(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::NewClassifierTrainerPrompt), projectName(""), projectSavePath(""), isStateValid(false)
 {
     ui->setupUi(this);
 }
 
-NewClassifierTrainerPrompt::~NewClassifierTrainerPrompt()
+NewClassifierTrainerPromptGUI::~NewClassifierTrainerPromptGUI()
 {
     delete ui;
 }
 
-void NewClassifierTrainerPrompt::on_projSavePathBtn_clicked()
+void NewClassifierTrainerPromptGUI::on_projSavePathBtn_clicked()
 {
     projectSavePath = QFileDialog::getExistingDirectory(this, "Project Directory",
                                                         QDir::homePath(),
@@ -34,7 +34,7 @@ void NewClassifierTrainerPrompt::on_projSavePathBtn_clicked()
     }
 }
 
-void NewClassifierTrainerPrompt::on_buttonBox_accepted()
+void NewClassifierTrainerPromptGUI::on_buttonBox_accepted()
 {
     projectName = ui->projectName->text();
     projectSavePath = ui->projectSavePath->text();
@@ -106,7 +106,7 @@ void NewClassifierTrainerPrompt::on_buttonBox_accepted()
     if(file.isOpen()) file.close();
 }
 
-bool NewClassifierTrainerPrompt::validPath(QString path)
+bool NewClassifierTrainerPromptGUI::validPath(QString path)
 {
     QFileInfo fileInfo(path);
     if (fileInfo.isDir())
@@ -129,17 +129,17 @@ bool NewClassifierTrainerPrompt::validPath(QString path)
     }
 }
 
-void NewClassifierTrainerPrompt::on_buttonBox_rejected()
+void NewClassifierTrainerPromptGUI::on_buttonBox_rejected()
 {
 
 }
 
-QString NewClassifierTrainerPrompt::getProjectName()
+QString NewClassifierTrainerPromptGUI::getProjectName()
 {
     return projectName;
 }
 
-QString NewClassifierTrainerPrompt::getProjectSavePath()
+QString NewClassifierTrainerPromptGUI::getProjectSavePath()
 {
     return projectSavePath;
 }

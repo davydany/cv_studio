@@ -19,25 +19,31 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    objdetect/classifiertrainer.cpp \
-    objdetect/newclassifiertrainerprompt.cpp \
     helpers/launcherpanel.cpp \
-#    objdetect/positiveimagemodel.cpp \
     objdetect/classifiertrainerproject.cpp \
-    objdetect/addsectiondialog.cpp \
-    objdetect/mouseselecteventfilter.cpp
+    objdetect/gui/classifiertrainergui.cpp \
+    objdetect/gui/addsectiondialoggui.cpp \
+    objdetect/gui/mouseselecteventfilter.cpp \
+    objdetect/gui/newclassifiertrainerpromptgui.cpp
 
 HEADERS  += mainwindow.h \
-    objdetect/classifiertrainer.h \
-    objdetect/newclassifiertrainerprompt.h \
     helpers/launcherpanel.h \
     includes.h \
-#    objdetect/positiveimagemodel.h \
     objdetect/classifiertrainerproject.h \
     objdetect/section.h \
-    objdetect/addsectiondialog.h \
-    objdetect/mouseselecteventfilter.h
-#    objdetect/positivetreeitem.h
+    objdetect/gui/mouseselecteventfilter.h \
+    objdetect/gui/classifiertrainergui.h \
+    objdetect/gui/addsectiondialoggui.h \
+    objdetect/gui/newclassifiertrainerpromptgui.h
+
+FORMS += \
+    objdetect/gui/newclassifiertrainerprompt.ui \
+    helpers/launcherpanel.ui \
+    objdetect/gui/addsectiondialog.ui \
+    objdetect/gui/classifiertrainergui.ui
+
+RESOURCES += \
+    image_assets.qrc
 
 
 # OpenCV
@@ -72,11 +78,3 @@ macx: LIBS += -L"/usr/local/Cellar/opencv/2.4.6.1/lib/" \
                 -lopencv_video \
                 -lopencv_videostab
 
-
-RESOURCES += \
-    image_assets.qrc
-
-FORMS += \
-    objdetect/newclassifiertrainerprompt.ui \
-    helpers/launcherpanel.ui \
-    objdetect/addsectiondialog.ui
