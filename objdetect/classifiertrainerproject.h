@@ -26,6 +26,9 @@ public:
     QList<QString>* positives();
     QList<QString>* negatives();
 
+    void setName(QString name) { m_projectName = new QString(name); }
+    void setDescription(QString desc) { m_projectDescription = new QString(desc); }
+    void setAuthor(QString author) { m_projectAuthor = new QString(author); }
     bool addPositiveImage(QString pathToPositiveImage);
     bool addNegativeImage(QString pathToNegativeImage);
     bool removePositiveImage(QString pathToPositiveImage);
@@ -37,6 +40,11 @@ public:
     bool save();
     bool load();
     bool hasErrors();
+
+    bool writePositivesFile();
+    bool writeNegativesFile();
+
+    bool trainCascade();
 
     void appendToErrors(QString msg);
     QStringList* errors() const;

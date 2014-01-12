@@ -95,7 +95,6 @@ void ClassifierTrainerGUI::initialize()
 
     // set layouts
     setLayout(ui->mainLayout);
-//    ui->positiveTab->setLayout(ui->positiveTabSplitter->layout());
     ui->positiveTab->setLayout(ui->positiveTabMainLayout);
     ui->positiveImagesGroup->setLayout(ui->positiveImagesGroupLayout);
     ui->positiveImagePreviewGroup->setLayout(ui->positiveImagePreviewGroupLayout);
@@ -106,6 +105,9 @@ void ClassifierTrainerGUI::initialize()
     ui->negativeImagePreviewGroup->setLayout(ui->negativeImagePreviewGroupLayout);
     ui->negativeTab->adjustSize();
 
+    ui->prefTab->setLayout(ui->prefTabLayout);
+    ui->consoleOutputPage->setLayout(ui->consoleOutputPageLayout);
+
     // misc
     setWindowTitle(QString("Classifier Trainer - ") + QString(project->name()->toStdString().c_str()));
     MainWindow *parent = (MainWindow *) this->parent();
@@ -113,6 +115,11 @@ void ClassifierTrainerGUI::initialize()
     updatePositivesGroup();
     updateNegativesGroup();
     ui->progressBar->hide();
+
+    // load project components to ui
+    ui->projName->setText(QString(project->name()->toStdString().c_str()));
+    ui->projDescription->setText(QString(project->description()->toStdString().c_str()));
+    ui->projAuthor->setText(QString(project->author()->toStdString().c_str()));
 
 }
 void ClassifierTrainerGUI::updatePositivesGroup()
@@ -188,7 +195,6 @@ void ClassifierTrainerGUI::updatePositivesGroup()
     positivesTreeView->resizeColumnToContents(3);
     positivesTreeView->resizeColumnToContents(4);
     positivesTreeView->expandAll();
-    ui->positiveTabSplitter->adjustSize();
 }
 
 void ClassifierTrainerGUI::updateNegativesGroup()
@@ -217,7 +223,6 @@ void ClassifierTrainerGUI::updateNegativesGroup()
 
     negativesTreeView->setModel(negativesModel);
     negativesTreeView->resizeColumnToContents(0);
-    ui->negativeTabSplitter->adjustSize();
 
 }
 
@@ -276,6 +281,28 @@ void ClassifierTrainerGUI::closeTrainer()
 //    this->close(); // close if the user requested the window to be closed (NOT WORKING AS INTENDED)
 }
 
+void ClassifierTrainerGUI::log(QString string)
+{
+    ui->consoleOutBox->appendPlainText(string);
+}
+
+void ClassifierTrainerGUI::updateProgressBar(int percent)
+{
+    if ((percent >= 0) && (percent <= 100))
+        ui->progressBar->setValue(percent);
+}
+
+void ClassifierTrainerGUI::prepareRun()
+{
+    ui->progressBar->show();
+    ui->progressBar->setValue(0);
+    ui->consoleOutBox->clear();
+}
+
+void ClassifierTrainerGUI::cleanRun()
+{
+    ui->progressBar->hide();
+}
 
 // SLOTS --------------------------------------------------------------------------------------------------------------
 void ClassifierTrainerGUI::on_addImageToPositivesBtn_clicked()
@@ -481,5 +508,78 @@ void ClassifierTrainerGUI::on_closeTrainer_clicked()
 
 void ClassifierTrainerGUI::on_runTrainer_clicked()
 {
-    qDebug() << "Run Runner...";
+    prepareRun();
+    log("Starting training process ...");
+    ui->progressBar->show();
+    updateProgressBar(0);
+
+    // save the positives images and sections
+    bool success = project->writePositivesFile();
+    if (success)
+    {
+        log(QString("Saved Positives Images to 'positives.dat'"));
+        updateProgressBar(5);
+    }
+    else
+    {
+        foreach(QString err, *project->errors())
+        {
+            log(QString("Error: ") + err);
+            QMessageBox::critical(this, "Unable to save positives images to file.", err);
+        }
+        return cleanRun();
+    }
+
+    // save the negatives images
+    success = project->writeNegativesFile();
+    if (success)
+    {
+        log(QString("Saved Negative Images to 'negatives.dat'"));
+        updateProgressBar(10);
+    }
+    else
+    {
+        foreach(QString err, *project->errors())
+        {
+            log(QString("Error: ") + err);
+            QMessageBox::critical(this, "Unable to save negative images to file.", err);
+        }
+        return cleanRun();
+    }
+
+    // start create_samples
+
+
+
+    // start training
+}
+
+void ClassifierTrainerGUI::on_projName_editingFinished()
+{
+    if (project->name()->compare(ui->projName->text()) != 0)
+    {
+        project->setName(ui->projName->text());
+        project->save();
+        ui->projSavedLabel->setText("Project Name was successfully saved.");
+    }
+}
+
+void ClassifierTrainerGUI::on_projDescription_editingFinished()
+{
+    if (project->description()->compare(ui->projDescription->text()) != 0)
+    {
+        project->setDescription(ui->projDescription->text());
+        project->save();
+        ui->projSavedLabel->setText("Project Description was successfully saved.");
+    }
+}
+
+void ClassifierTrainerGUI::on_projAuthor_editingFinished()
+{
+    if (project->author()->compare(ui->projAuthor->text()) != 0)
+    {
+        project->setAuthor(ui->projAuthor->text());
+        project->save();
+        ui->projSavedLabel->setText("Project Author was successfully saved.");
+    }
 }

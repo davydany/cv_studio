@@ -1,9 +1,10 @@
 #include "includes.h"
+#include "objdetect/traincascade/cascadeclassifier.h"
 #include "objdetect/section.h"
 #include "classifiertrainerproject.h"
 
-ClassifierTrainerProject::ClassifierTrainerProject(QString projectPath) //:
-//    validProjectFile(false), m_projectDirectory(projectDirectory), m_projectConfigFilePath(QString(""))
+ClassifierTrainerProject::ClassifierTrainerProject(QString projectPath) :
+    m_projectDirectory(projectPath), m_projectConfigFilePath(QString(""))
 {
     m_errors = new QStringList();
 
@@ -406,5 +407,84 @@ bool ClassifierTrainerProject::save()
     xmlWriter.writeEndElement(); // close <Elements> tag
     xmlWriter.writeEndElement(); // close <CVStudioProject> tag
     xmlWriter.writeEndDocument(); // close document
-
 }
+
+bool ClassifierTrainerProject::writePositivesFile()
+{
+    QString fileName("positives.dat");
+    QString filePath = QString("%1%2%3").arg(m_projectDirectory).arg(QDir::separator()).arg(fileName);
+    QFile file(filePath);
+
+    if (!file.open(QFile::WriteOnly))
+    {
+        appendToErrors(QString("Unable to open file to write positives images into.") + filePath);
+        return false;
+    }
+    else
+    {
+        QTextStream stream(&file);
+        foreach(QString path, m_positive_sections->keys())
+        {
+            QList<Section> sections = m_positive_sections->values(path);
+            int substring_index_begin = path.indexOf("positives");
+            int substring_index_end = path.size() - substring_index_begin;
+            stream << "./" << path.mid(substring_index_begin, substring_index_end) << "  " << sections.size() << "  ";
+            foreach(Section s, sections)
+            {
+                stream << s.x() << " " << s.y() << " " << s.width() << " " << s.height() << "  ";
+            }
+            stream << endl;
+        }
+    }
+    file.close();
+    return true;
+}
+
+bool ClassifierTrainerProject::writeNegativesFile()
+{
+    QString fileName("negatives.dat");
+    QString filePath = QString("%1%2%3").arg(m_projectDirectory).arg(QDir::separator()).arg(fileName);
+    QFile file(filePath);
+
+    if (!file.open(QFile::WriteOnly))
+    {
+        appendToErrors(QString("Unable to open file to write negatives images into.") + filePath);
+        return false;
+    }
+    else
+    {
+        QTextStream stream(&file);
+        foreach(QString path, *m_negatives)
+        {
+            int substring_index_begin = path.indexOf("negatives");
+            int substring_index_end = path.size() - substring_index_begin;
+            stream << "./" << path.mid(substring_index_begin, substring_index_end) << endl;
+        }
+    }
+    file.close();
+    return true;
+}
+
+bool ClassifierTrainerProject::trainCascade()
+{
+//    CvCascadeClassifier classifier;
+//    string cascadeDirName, vecName, bgName;
+//    int numPos    = 2000;
+//    int numNeg    = 1000;
+//    int numStages = 20;
+//    int precalcValBufSize = 256,
+//        precalcIdxBufSize = 256;
+//    bool baseFormatSave = false;
+
+//    CvCascadeParams cascadeParams;
+//    CvCascadeBoostParams stageParams;
+//    Ptr<CvFeatureParams> featureParams[] = { Ptr<CvFeatureParams>(new CvHaarFeatureParams),
+//                                             Ptr<CvFeatureParams>(new CvLBPFeatureParams),
+//                                             Ptr<CvFeatureParams>(new CvHOGFeatureParams)
+//                                           };
+//    classifier.train()
+}
+
+
+
+

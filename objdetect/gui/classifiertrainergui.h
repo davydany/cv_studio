@@ -35,6 +35,10 @@ private:
     void updatePositivesGroup();
     void updateNegativesGroup();
     void previewImage(QLabel *imageLabel, QString path, Section *section=0);
+    void prepareRun();
+    void cleanRun();
+    void log(QString string);
+    void updateProgressBar(int percent);
 
     // members
     QTreeView *positivesTreeView;
@@ -70,6 +74,9 @@ private slots:
     void on_negativeTreeView_activated(const QModelIndex &index);
     void on_closeTrainer_clicked();
     void on_runTrainer_clicked();
+    void on_projName_editingFinished();
+    void on_projDescription_editingFinished();
+    void on_projAuthor_editingFinished();
 };
 
 #endif // CLASSIFIERTRAINERGUI_H
