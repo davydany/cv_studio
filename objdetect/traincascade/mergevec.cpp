@@ -1,3 +1,8 @@
+//
+// mergevec.cpp
+// Created by: Naotoshi Seo
+// More Info: http://note.sonots.com/SciSoftware/haartraining.html#w0a08ab4
+// 
 #include <cv.h>
 #include <highgui.h>
 #include <stdio.h>
