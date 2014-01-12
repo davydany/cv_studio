@@ -27,7 +27,7 @@ ClassifierTrainerGUI::ClassifierTrainerGUI(bool new_trainer, QWidget *parent) :
             projectDirectory = prompt->getProjectSavePath();
             project = new ClassifierTrainerProject(projectDirectory);
             project->load();
-            projectName = *project->name();
+            projectName = project->name();
         }
         else
         {
@@ -59,7 +59,7 @@ ClassifierTrainerGUI::ClassifierTrainerGUI(bool new_trainer, QWidget *parent) :
                 closeTrainer();
             }
 
-            projectName = *project->name();
+            projectName = project->name();
             projectDirectory = selectedProjectDir;
             isValid = true;
 
@@ -109,7 +109,7 @@ void ClassifierTrainerGUI::initialize()
     ui->consoleOutputPage->setLayout(ui->consoleOutputPageLayout);
 
     // misc
-    setWindowTitle(QString("Classifier Trainer - ") + QString(project->name()->toStdString().c_str()));
+    setWindowTitle(QString("Classifier Trainer - ") + project->name());
     MainWindow *parent = (MainWindow *) this->parent();
     parent->setWindowTitle(windowTitle());
     updatePositivesGroup();
@@ -117,9 +117,9 @@ void ClassifierTrainerGUI::initialize()
     ui->progressBar->hide();
 
     // load project components to ui
-    ui->projName->setText(QString(project->name()->toStdString().c_str()));
-    ui->projDescription->setText(QString(project->description()->toStdString().c_str()));
-    ui->projAuthor->setText(QString(project->author()->toStdString().c_str()));
+    ui->projName->setText(project->name());
+    ui->projDescription->setText(project->description());
+    ui->projAuthor->setText(project->author());
 
 }
 void ClassifierTrainerGUI::updatePositivesGroup()
@@ -556,7 +556,7 @@ void ClassifierTrainerGUI::on_runTrainer_clicked()
 
 void ClassifierTrainerGUI::on_projName_editingFinished()
 {
-    if (project->name()->compare(ui->projName->text()) != 0)
+    if (project->name().compare(ui->projName->text()) != 0)
     {
         project->setName(ui->projName->text());
         project->save();
@@ -566,7 +566,7 @@ void ClassifierTrainerGUI::on_projName_editingFinished()
 
 void ClassifierTrainerGUI::on_projDescription_editingFinished()
 {
-    if (project->description()->compare(ui->projDescription->text()) != 0)
+    if (project->description().compare(ui->projDescription->text()) != 0)
     {
         project->setDescription(ui->projDescription->text());
         project->save();
@@ -576,7 +576,7 @@ void ClassifierTrainerGUI::on_projDescription_editingFinished()
 
 void ClassifierTrainerGUI::on_projAuthor_editingFinished()
 {
-    if (project->author()->compare(ui->projAuthor->text()) != 0)
+    if (project->author().compare(ui->projAuthor->text()) != 0)
     {
         project->setAuthor(ui->projAuthor->text());
         project->save();

@@ -1,17 +1,15 @@
 #include "includes.h"
 #include "objdetect/traincascade/cascadeclassifier.h"
+#include "objdetect/traincascade/cvhaartraining.h"
 #include "objdetect/section.h"
 #include "classifiertrainerproject.h"
 
 ClassifierTrainerProject::ClassifierTrainerProject(QString projectPath) :
-    m_projectDirectory(projectPath), m_projectConfigFilePath(QString(""))
+    m_projectDirectory(projectPath), m_projectConfigFilePath(QString("")),
+    m_positivesFilename("positives.dat"), m_negativesFilename("negatives.dat"),
+    m_projectName(""), m_projectDescription(""), m_projectAuthor(ClassifierTrainerProject::projectType())
 {
     m_errors = new QStringList();
-
-    m_projectName = new QString();
-    m_projectDescription = new QString();
-    m_projectAuthor = new QString();
-    m_projectType = new QString(ClassifierTrainerProject::projectType());
 
     m_positive_sections = new QMultiMap<QString, Section>();
     m_positives = new QList<QString>();
@@ -22,11 +20,6 @@ ClassifierTrainerProject::ClassifierTrainerProject(QString projectPath) :
 
 ClassifierTrainerProject::~ClassifierTrainerProject()
 {
-    delete m_projectName;
-    delete m_projectDescription;
-    delete m_projectAuthor;
-    delete m_projectType;
-
     delete m_positive_sections;
     delete m_positives;
     delete m_negatives;
@@ -72,19 +65,38 @@ QStringList* ClassifierTrainerProject::errors() const
 }
 
 
-QString* ClassifierTrainerProject::name()
+QString ClassifierTrainerProject::name()
 {
     return m_projectName;
 }
-QString* ClassifierTrainerProject::description()
+
+void ClassifierTrainerProject::setName(QString name)
+{
+    m_projectName = QString(name);
+}
+
+QString ClassifierTrainerProject::description()
 {
     return m_projectDescription;
 }
-QString* ClassifierTrainerProject::author()
+
+
+void ClassifierTrainerProject::setDescription(QString desc)
+{
+    m_projectDescription = QString(desc);
+}
+
+QString ClassifierTrainerProject::author()
 {
     return m_projectAuthor;
 }
-QString* ClassifierTrainerProject::type()
+
+void ClassifierTrainerProject::setAuthor(QString author)
+{
+    m_projectAuthor = QString(author);
+}
+
+QString ClassifierTrainerProject::type()
 {
     return m_projectType;
 }
@@ -229,16 +241,16 @@ bool ClassifierTrainerProject::load()
         {
             QString nodeName = reader.name().toString();
             if (nodeName == "Name")
-                m_projectName = new QString(reader.readElementText());
+                m_projectName = QString(reader.readElementText());
 
             if (nodeName == "Description")
-                m_projectDescription = new QString(reader.readElementText());
+                m_projectDescription = QString(reader.readElementText());
 
             if (nodeName == "Author")
-                m_projectAuthor = new QString(reader.readElementText());
+                m_projectAuthor = QString(reader.readElementText());
 
             if (nodeName == "Type")
-                m_projectType = new QString(reader.readElementText());
+                m_projectType = QString(reader.readElementText());
 
             if (nodeName == "Elements")
             {
@@ -330,9 +342,9 @@ bool ClassifierTrainerProject::save()
     // write header
     xmlWriter.writeStartElement("Header");
     xmlWriter.writeStartElement("Project");
-    xmlWriter.writeTextElement("Name", QString(name()->toStdString().c_str()));
-    xmlWriter.writeTextElement("Description", QString(description()->toStdString().c_str()));
-    xmlWriter.writeTextElement("Author", QString(author()->toStdString().c_str()));
+    xmlWriter.writeTextElement("Name", name());
+    xmlWriter.writeTextElement("Description", description());
+    xmlWriter.writeTextElement("Author", author());
     xmlWriter.writeTextElement("Type", ClassifierTrainerProject::projectType());
     xmlWriter.writeEndElement(); // end Project
     xmlWriter.writeEndElement(); // end Header
@@ -463,6 +475,13 @@ bool ClassifierTrainerProject::writeNegativesFile()
     }
     file.close();
     return true;
+}
+
+bool ClassifierTrainerProject::createSamples()
+{
+    QString output_vector_filename = QString("%1.vec").arg(m_projectName.toLower().replace(" ", "-"));
+    QString negatives_filename = "negatives.dat";
+    QString positives_filename = "positives.dat";
 }
 
 bool ClassifierTrainerProject::trainCascade()
